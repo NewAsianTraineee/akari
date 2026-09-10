@@ -24,7 +24,7 @@ export function SignatureDishes() {
           </Reveal>
         </div>
 
-        <div className="mt-16 grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-x-10 gap-y-16 sm:grid-cols-2 lg:mx-auto lg:max-w-3xl">
           {signatureDishes.map((dish, i) => (
             <Reveal key={dish.name} delay={i * 90}>
               <a href="#menu" className="group block">

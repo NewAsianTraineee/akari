@@ -62,7 +62,7 @@ export default function RootLayout({
     url: restaurant.url,
     openingHours: ["Tu-Th 17:00-23:00", "Fr-Sa 17:00-00:00"],
     acceptsReservations: "True",
-    priceRange: "$$$",
+    priceRange: "$$",
   };
 
   return (
