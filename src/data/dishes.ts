@@ -12,13 +12,13 @@ export type SignatureDish = {
 // traditional roll set. Photos from Unsplash.
 export const signatureDishes: SignatureDish[] = [
   {
-    name: "Salmon Nigiri — 6 pieces",
-    nameJp: "鮭握り 六貫",
+    name: "Salmon Nigiri — 2 pieces",
+    nameJp: "鮭握り 二貫",
     description:
-      "Six pieces of salmon nigiri — warm shari, brushed with aged shoyu, served in the classic oval form.",
-    price: "79",
+      "Two pieces of salmon nigiri — warm shari, brushed with aged shoyu, served in the classic oval form.",
+    price: "39",
     image: "/images/menu/nigiri-set.jpg",
-    alt: "Six pieces of salmon nigiri on a white plate",
+    alt: "Two pieces of salmon nigiri on a black plate",
   },
   {
     name: "Rolls — 12 pieces",
