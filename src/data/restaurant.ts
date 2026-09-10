@@ -4,7 +4,7 @@ export const restaurant = {
   tagline: "Omakase · Contemporary Japanese",
   description:
     "AKARI is a contemporary omakase counter in Stockholm — an intimate evening built around seasonality, precision and quiet hospitality.",
-  url: "https://akari.demo",
+  url: "https://akari.vercel.app",
   // ---- Contact details (placeholders — replace with real info) ----
   address: "Address Placeholder, Stockholm",
   city: "Stockholm, Sweden",
