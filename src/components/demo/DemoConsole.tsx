@@ -344,6 +344,30 @@ export function DemoConsole() {
       path: "/bookings",
     });
 
+  // The written assignment asks for one call that is denied because of
+  // insufficient authority. A guest token is fetched separately so the result
+  // is 403 no matter which role is signed in above.
+  const forbidden = async () => {
+    let tokenOverride: string | null = null;
+
+    try {
+      tokenOverride = (await fetchToken("guest")).accessToken;
+    } catch {
+      tokenOverride = session?.accessToken ?? null;
+    }
+
+    await run(
+      "POST /bookings/{id}/confirm som GÄST",
+      "har giltig token men saknar hasAnyRole(STAFF, ADMIN) → 403",
+      "403 — skillnaden mot 401",
+      {
+        method: "POST",
+        path: `/bookings/${bookingId}/confirm`,
+        tokenOverride,
+      },
+    );
+  };
+
   return (
     <div className="u-container pb-28 pt-28">
       {/* ---------------------------------------------------------- header */}
@@ -620,8 +644,11 @@ export function DemoConsole() {
           Det här är kärnan i Del 3. Klicka i ordningen{" "}
           <span className="text-ivory">utan token</span> →{" "}
           <span className="text-ivory">med token</span> →{" "}
-          <span className="text-ivory">fejk-token</span> och se att alla tre
-          ger olika svar.
+          <span className="text-ivory">fejk-token</span> och avsluta med{" "}
+          <span className="text-ivory">Bekräfta som gäst</span>. De tre första
+          visar skillnaden mellan 401 och 200. Den sista är den som uppgiften
+          uttryckligen kräver: ett anrop som nekas på grund av otillräcklig
+          behörighet.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -634,6 +661,9 @@ export function DemoConsole() {
           <button onClick={fakeToken} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
             Fejk-token
           </button>
+          <button onClick={() => void forbidden()} disabled={busy} className="btn btn-gold !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
+            Bekräfta som gäst
+          </button>
         </div>
 
         <div className="mt-7 grid gap-4 border-t border-gold/10 pt-6 text-[13px] leading-relaxed text-ash-dim sm:grid-cols-2">
@@ -643,7 +673,9 @@ export function DemoConsole() {
           </p>
           <p>
             <span className="text-ivory">403</span> = giltig token, men rollen
-            eller scopet räcker inte.
+            eller scopet räcker inte.{" "}
+            <span className="text-ivory">Bekräfta som gäst</span> ger den —
+            gästen får skapa bokningar men inte bekräfta dem.
           </p>
           <p>
             <span className="text-ivory">CORS</span> — svaret kommer bara
