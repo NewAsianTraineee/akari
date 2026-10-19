@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   API_BASE,
   CLIENT_ID,
@@ -90,6 +90,8 @@ export function DemoConsole() {
         body?: unknown;
         ifNoneMatch?: string | null;
         tokenOverride?: string | null;
+        /** Used for follow-up fetches so they do not bury the action they belong to. */
+        silent?: boolean;
         onResult?: (call: ApiCall) => void;
       },
     ) => {
@@ -97,9 +99,12 @@ export function DemoConsole() {
       // feedback instead of looking like a dead button while the request runs.
       const id = nextId.current++;
 
-      setLog((prev) =>
-        [{ id, label, rule, expected, call: null, pending: true }, ...prev].slice(0, 40),
-      );
+      if (!opts.silent) {
+        setLog((prev) =>
+          [{ id, label, rule, expected, call: null, pending: true }, ...prev].slice(0, 40),
+        );
+      }
+
       setBusy(true);
 
       try {
@@ -111,11 +116,13 @@ export function DemoConsole() {
           token: opts.tokenOverride === undefined ? token : opts.tokenOverride,
         });
 
-        setLog((prev) =>
-          prev.map((entry) =>
-            entry.id === id ? { ...entry, call, pending: false } : entry,
-          ),
-        );
+        if (!opts.silent) {
+          setLog((prev) =>
+            prev.map((entry) =>
+              entry.id === id ? { ...entry, call, pending: false } : entry,
+            ),
+          );
+        }
 
         opts.onResult?.(call);
         return call;
@@ -147,14 +154,23 @@ export function DemoConsole() {
     setAuthError(null);
   };
 
+  // Re-render every second while a token is held so the countdown and the
+  // expiry warning stay honest even when the user is not clicking anything.
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (!session) return;
+    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => clearInterval(id);
+  }, [session]);
+
   const countdown = useMemo(() => {
     if (!session) return null;
     const left = Math.max(0, session.expiresAt - Date.now());
     const s = Math.ceil(left / 1000);
     return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-  }, [session, log]);
+  }, [session]);
 
-  const loadRestaurants = () =>
+  const loadRestaurants = (silent = false) =>
     run(
       "Lista restauranger",
       "GET /restaurants → hasAuthority(SCOPE_restaurant:read)",
@@ -162,6 +178,7 @@ export function DemoConsole() {
       {
         method: "GET",
         path: "/restaurants?page=0&size=10",
+        silent,
         onResult: (call) => {
           if (call.status === 200 && Array.isArray(call.body)) {
             setRestaurants(call.body as Restaurant[]);
@@ -183,7 +200,7 @@ export function DemoConsole() {
           if (call.status === 201) {
             const created = call.body as Restaurant;
             setBookingId(created.id);
-            loadRestaurants();
+            loadRestaurants(true);
           }
         },
       },
@@ -198,15 +215,16 @@ export function DemoConsole() {
         if (call.status === 201) {
           const created = call.body as Booking;
           setBookingId(created.id);
-          loadBookings();
+          loadBookings(true);
         }
       },
     });
 
-  const loadBookings = () =>
+  const loadBookings = (silent = false) =>
     run("Lista bokningar", "GET /bookings → hasAuthority(SCOPE_booking:read)", "200", {
       method: "GET",
       path: "/bookings",
+      silent,
       onResult: (call) => {
         if (call.status === 200 && Array.isArray(call.body)) {
           setBookings(call.body as Booking[]);
@@ -253,7 +271,7 @@ export function DemoConsole() {
         path: `/bookings/${bookingId}/${target}`,
         onResult: (call) => {
           if (call.status >= 200 && call.status < 300) {
-            loadBookings();
+            loadBookings(true);
           }
         },
       },
@@ -398,13 +416,20 @@ export function DemoConsole() {
             Keycloak
           </p>
         )}
+
+        {expired && (
+          <p className="mt-3 border-l-2 border-red-400/60 pl-4 text-[13px] leading-relaxed text-red-400">
+            Tokenen har gått ut. Varje anrop ger nu 401 tills du loggar in igen
+            — även bekräfta och avboka.
+          </p>
+        )}
       </section>
 
       {/* ------------------------------------------------------- restaurants */}
       <section className="mt-14 rounded-sm border border-gold/15 bg-charcoal p-6 sm:p-8">
         <p className="u-section-label">Steg 2 · Restauranger</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <button onClick={loadRestaurants} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
+          <button onClick={() => loadRestaurants()} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
             Lista restauranger
           </button>
           <button onClick={createRestaurant} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
@@ -482,7 +507,7 @@ export function DemoConsole() {
           <button onClick={createBooking} disabled={busy} className="btn btn-gold !px-6 !py-2.5 !text-[10px] disabled:opacity-50">
             Skapa bokning
           </button>
-          <button onClick={loadBookings} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
+          <button onClick={() => loadBookings()} disabled={busy} className="btn btn-ghost !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
             Lista bokningar
           </button>
         </div>
@@ -524,7 +549,15 @@ export function DemoConsole() {
           </button>
         </div>
 
-        <p className="mt-4 text-[13px] leading-relaxed text-ash-dim">
+        <p className="mt-4 text-[13px] leading-relaxed text-ash">
+          Båda knapparna kräver rollen{" "}
+          <span className="text-gold">STAFF</span> eller{" "}
+          <span className="text-gold">ADMIN</span>. Som gäst får du{" "}
+          <span className="text-gold">403</span> här — det är rollen som avgör,
+          inte HATEOAS.
+        </p>
+
+        <p className="mt-3 text-[13px] leading-relaxed text-ash-dim">
           Bekräfta två gånger i samma ställning ger 409 —{" "}
           <span className="text-ash">BookingStateMachine</span> tillåter inte
           CONFIRMED → CONFIRMED. Länkarna i svaret berättar vilka övergångar som
