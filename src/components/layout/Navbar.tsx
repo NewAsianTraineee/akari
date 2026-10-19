@@ -60,6 +60,13 @@ export function Navbar() {
                 {item.label}
               </a>
             ))}
+            <a
+              href="/demo"
+              onClick={close}
+              className="u-anim-line text-[11px] font-medium uppercase tracking-[0.24em] text-gold transition-colors duration-300 hover:text-gold-soft"
+            >
+              Admin
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -115,6 +122,13 @@ export function Navbar() {
               {item.label}
             </a>
           ))}
+          <a
+            href="/demo"
+            onClick={close}
+            className="btn btn-ghost mt-2 w-fit !text-[10px]"
+          >
+            Admin
+          </a>
           <a
             href="#reserve"
             onClick={close}
