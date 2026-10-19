@@ -639,16 +639,13 @@ export function DemoConsole() {
 
       {/* ------------------------------------------------------------ security */}
       <section className="mt-14 rounded-sm border border-gold/15 bg-charcoal p-6 sm:p-8">
-        <p className="u-section-label">Steg 5 · Säkerhet — 401 mot 403 mot CORS</p>
+        <p className="u-section-label">Steg 5 · Säkerhet — 401 mot 403</p>
         <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-ash/80">
-          Det här är kärnan i Del 3. Klicka i ordningen{" "}
+          Del 3. Klicka i ordningen{" "}
           <span className="text-ivory">utan token</span> →{" "}
           <span className="text-ivory">med token</span> →{" "}
-          <span className="text-ivory">fejk-token</span> och avsluta med{" "}
-          <span className="text-ivory">Bekräfta som gäst</span>. De tre första
-          visar skillnaden mellan 401 och 200. Den sista är den som uppgiften
-          uttryckligen kräver: ett anrop som nekas på grund av otillräcklig
-          behörighet.
+          <span className="text-ivory">fejk-token</span> →{" "}
+          <span className="text-ivory">Bekräfta som gäst</span>.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -664,44 +661,6 @@ export function DemoConsole() {
           <button onClick={() => void forbidden()} disabled={busy} className="btn btn-gold !px-5 !py-2.5 !text-[10px] disabled:opacity-50">
             Bekräfta som gäst
           </button>
-        </div>
-
-        <div className="mt-7 grid gap-4 border-t border-gold/10 pt-6 text-[13px] leading-relaxed text-ash-dim sm:grid-cols-2">
-          <p>
-            <span className="text-ivory">401</span> = ingen eller ogiltig
-            token. Du vet inte vem du är.
-          </p>
-          <p>
-            <span className="text-ivory">403</span> = giltig token, men rollen
-            eller scopet räcker inte.{" "}
-            <span className="text-ivory">Bekräfta som gäst</span> ger den —
-            gästen får skapa bokningar men inte bekräfta dem.
-          </p>
-          <p>
-            <span className="text-ivory">CORS</span> — svaret kommer bara
-            fram för att min origin står i{" "}
-            <span className="font-mono text-[11px] text-gold">
-              CORS_ALLOWED_ORIGINS
-            </span>{" "}
-            på Render. En annan origin får 403 med tom body.
-          </p>
-          <p>
-            <span className="text-ivory">Varför syns inte</span>{" "}
-            <span className="font-mono text-[11px]">
-              access-control-allow-origin
-            </span>{" "}
-            i loggen? Webbläsaren tillåter inte JavaScript att läsa den headern.
-            Att statuskoden gick att läsa alls är beviset.
-          </p>
-          <p>
-            <span className="text-ivory">Preflight</span> — webbläsaren skickar
-            ett OPTIONS innan varje anrop med Authorization-headern. Det
-            tillåts via{" "}
-            <span className="font-mono text-[11px] text-gold">
-              OPTIONS /** → permitAll
-            </span>
-            .
-          </p>
         </div>
       </section>
 
