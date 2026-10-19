@@ -56,6 +56,7 @@ export const DEMO_USERS: Record<"guest" | "staff" | "admin", DemoUser> = {
 
 export type TokenSession = {
   accessToken: string;
+  refreshToken: string | null;
   username: string;
   roles: string[];
   scopes: string[];
@@ -124,43 +125,75 @@ export function decodeClaims(token: string): KeycloakClaims {
   }
 }
 
-export async function fetchToken(username: string): Promise<TokenSession> {
+type TokenPayload = {
+  access_token?: string;
+  refresh_token?: string;
+  expires_in?: number;
+  scope?: string;
+  error?: string;
+  error_description?: string;
+};
+
+async function requestToken(
+  body: Record<string, string>,
+  fallbackUsername: string,
+): Promise<TokenSession> {
   // Keycloak does not send Access-Control-Allow-Origin on the token response,
   // so the browser cannot call it directly. The Next.js route handler does the
   // call server side instead — see src/app/api/token/route.ts.
   const res = await fetch("/api/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password: username }),
+    body: JSON.stringify(body),
     cache: "no-store",
   });
 
-  const payload = await res.json().catch(() => ({}));
+  const payload = (await res.json().catch(() => ({}))) as TokenPayload;
 
-  if (!res.ok) {
+  if (!res.ok || !payload.access_token) {
     throw new Error(
-      (payload as { error_description?: string; error?: string }).error_description ??
-        (payload as { error?: string }).error ??
+      payload.error_description ??
+        payload.error ??
         `Keycloak svarade ${res.status}`,
     );
   }
 
-  const token = (payload as { access_token: string }).access_token;
-  const claims = decodeClaims(token);
-  const expiresIn = (payload as { expires_in?: number }).expires_in ?? 300;
+  const claims = decodeClaims(payload.access_token);
   const now = Math.floor(Date.now() / 1000);
 
   return {
-    accessToken: token,
-    username: claims.preferred_username ?? username,
-    roles: claims.realm_access?.roles?.filter((r) => r !== "default-roles-restaurant") ?? [],
+    accessToken: payload.access_token,
+    // Keycloak rotates refresh tokens. Keep the previous one if the response
+    // does not include a replacement.
+    refreshToken: payload.refresh_token ?? body.refresh_token ?? null,
+    username: claims.preferred_username ?? fallbackUsername,
+    roles:
+      claims.realm_access?.roles?.filter((r) => r !== "default-roles-restaurant") ?? [],
     scopes:
-      typeof (payload as { scope?: string }).scope === "string"
-        ? ((payload as { scope: string }).scope.split(" "))
+      typeof payload.scope === "string"
+        ? payload.scope.split(" ")
         : (claims.scope?.split(" ") ?? []),
     issuedAt: (claims.issued_at ?? now) * 1000,
-    expiresAt: (claims.exp ?? now + expiresIn) * 1000,
+    expiresAt: (claims.exp ?? now + (payload.expires_in ?? 300)) * 1000,
   };
+}
+
+export async function fetchToken(username: string): Promise<TokenSession> {
+  return requestToken({ username, password: username }, username);
+}
+
+/**
+ * Trades the refresh token for a fresh access token. The console calls this
+ * shortly before expiry so a demonstration does not end on an unexpected 401.
+ */
+export async function refreshSession(session: TokenSession): Promise<TokenSession> {
+  if (!session.refreshToken) {
+    throw new Error("Ingen refresh-token sparad för den här sessionen.");
+  }
+  return requestToken(
+    { refreshToken: session.refreshToken },
+    session.username,
+  );
 }
 
 export async function request(opts: {

@@ -9,6 +9,9 @@
  * Demo plumbing only. The resource owner password grant must never run in a
  * browser in a real product, and this route exists so the demo console can
  * show the API's own security rules instead of fighting the IdP's CORS.
+ *
+ * Supports both the password grant (sign in) and the refresh grant (renewing
+ * an access token before it expires).
  */
 
 import { CLIENT_ID, DEMO_SCOPES, KEYCLOAK_BASE, REALM } from "@/lib/akari-api";
@@ -18,34 +21,41 @@ export const runtime = "nodejs";
 const TIMEOUT_MS = 15_000;
 
 export async function POST(request: Request) {
-  let username: unknown;
-  let password: unknown;
+  let parsed: Record<string, unknown>;
 
   try {
-    const parsed = (await request.json()) as Record<string, unknown>;
-    username = parsed.username;
-    password = parsed.password;
+    parsed = (await request.json()) as Record<string, unknown>;
   } catch {
     return Response.json(
-      { error: "bad_request", error_description: "Expected a JSON body with username and password." },
+      { error: "bad_request", error_description: "Expected a JSON body." },
       { status: 400 },
     );
   }
 
-  if (typeof username !== "string" || typeof password !== "string" || !username || !password) {
+  const form = new URLSearchParams({ client_id: CLIENT_ID });
+
+  if (typeof parsed.refreshToken === "string" && parsed.refreshToken) {
+    form.set("grant_type", "refresh_token");
+    form.set("refresh_token", parsed.refreshToken);
+  } else if (
+    typeof parsed.username === "string" &&
+    typeof parsed.password === "string" &&
+    parsed.username &&
+    parsed.password
+  ) {
+    form.set("grant_type", "password");
+    form.set("username", parsed.username);
+    form.set("password", parsed.password);
+    form.set("scope", DEMO_SCOPES);
+  } else {
     return Response.json(
-      { error: "bad_request", error_description: "Both username and password are required." },
+      {
+        error: "bad_request",
+        error_description: "Provide username and password, or a refreshToken.",
+      },
       { status: 400 },
     );
   }
-
-  const form = new URLSearchParams({
-    grant_type: "password",
-    client_id: CLIENT_ID,
-    username,
-    password,
-    scope: DEMO_SCOPES,
-  });
 
   try {
     const res = await fetch(

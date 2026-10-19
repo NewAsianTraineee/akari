@@ -9,6 +9,7 @@ import {
   REALM,
   bookingBody,
   fetchToken,
+  refreshSession,
   request,
   type ApiCall,
   type Booking,
@@ -162,6 +163,46 @@ export function DemoConsole() {
     const id = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(id);
   }, [session]);
+
+  // The latest session is kept in a ref so the renewal interval does not have
+  // to be rebuilt every time a token is issued.
+  const sessionRef = useRef<TokenSession | null>(null);
+  useEffect(() => {
+    sessionRef.current = session;
+  }, [session]);
+
+  // Keycloak rotates the refresh token, so every renewal stores the token the
+  // previous response handed back.
+  const renew = useCallback(async () => {
+    const current = sessionRef.current;
+    if (!current?.refreshToken) return;
+
+    try {
+      setSession(await refreshSession(current));
+      setAuthError(null);
+    } catch (err) {
+      setRole("none");
+      setSession(null);
+      setAuthError(
+        err instanceof Error
+          ? `Kunde inte förnya tokenen: ${err.message}`
+          : "Kunde inte förnya tokenen.",
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!session?.refreshToken) return;
+
+    const id = setInterval(() => {
+      const current = sessionRef.current;
+      if (current && current.expiresAt - Date.now() < 60_000) {
+        void renew();
+      }
+    }, 15_000);
+
+    return () => clearInterval(id);
+  }, [session, renew]);
 
   const countdown = useMemo(() => {
     if (!session) return null;
@@ -414,13 +455,14 @@ export function DemoConsole() {
           >
             Token löper ut om {countdown} · accessTokenLifespan är 5 minuter i
             Keycloak
+            {session.refreshToken ? " · förnyas automatiskt" : ""}
           </p>
         )}
 
         {expired && (
           <p className="mt-3 border-l-2 border-red-400/60 pl-4 text-[13px] leading-relaxed text-red-400">
-            Tokenen har gått ut. Varje anrop ger nu 401 tills du loggar in igen
-            — även bekräfta och avboka.
+            Tokenen har gått ut och kunde inte förnyas. Varje anrop ger nu 401
+            tills du loggar in igen — även bekräfta och avboka.
           </p>
         )}
       </section>
