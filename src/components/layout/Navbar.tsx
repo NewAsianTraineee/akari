@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { restaurant } from "@/data/restaurant";
+import { useHomeAnchor } from "@/lib/nav";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const anchor = useHomeAnchor();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -38,7 +40,7 @@ export function Navbar() {
           }`}
         >
           <a
-            href="#top"
+            href={anchor("#top")}
             onClick={close}
             aria-label={`${restaurant.name} — home`}
             className="relative z-[160] flex items-baseline gap-2 font-display text-[1.6rem] font-medium tracking-[0.16em] text-ivory"
@@ -53,7 +55,7 @@ export function Navbar() {
             {restaurant.nav.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={anchor(item.href)}
                 onClick={close}
                 className="u-anim-line text-[11px] font-medium uppercase tracking-[0.24em] text-ivory/75 transition-colors duration-300 hover:text-ivory"
               >
@@ -71,7 +73,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <a
-              href="#reserve"
+              href={anchor("#reserve")}
               onClick={close}
               className="btn btn-gold !px-6 !py-2.5 hidden text-[11px] sm:inline-flex"
             >
@@ -109,7 +111,7 @@ export function Navbar() {
           {restaurant.nav.map((item, i) => (
             <a
               key={item.href}
-              href={item.href}
+              href={anchor(item.href)}
               onClick={close}
               className="flex items-baseline gap-4 font-display text-4xl font-light tracking-tight text-ivory transition-colors hover:text-gold"
               style={{
@@ -130,7 +132,7 @@ export function Navbar() {
             Admin
           </a>
           <a
-            href="#reserve"
+            href={anchor("#reserve")}
             onClick={close}
             className="btn btn-gold mt-4 w-fit"
           >

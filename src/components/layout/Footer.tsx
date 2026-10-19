@@ -1,7 +1,11 @@
+"use client";
+
 import { restaurant, hoursList } from "@/data/restaurant";
+import { useHomeAnchor } from "@/lib/nav";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const anchor = useHomeAnchor();
 
   return (
     <footer className="border-t border-gold/10 bg-charcoal">
@@ -22,7 +26,7 @@ export function Footer() {
             {restaurant.nav.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={anchor(item.href)}
                   className="u-anim-line text-ash/75 transition-colors hover:text-ivory"
                 >
                   {item.label}
@@ -60,7 +64,7 @@ export function Footer() {
               {restaurant.email}
             </a>
           </p>
-          <a href="#reserve" className="btn btn-gold mt-7 !px-6 !py-2.5 text-[11px]">
+          <a href={anchor("#reserve")} className="btn btn-gold mt-7 !px-6 !py-2.5 text-[11px]">
             Reserve a table
           </a>
         </div>

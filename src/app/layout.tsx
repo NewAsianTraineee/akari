@@ -73,7 +73,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <a
-          href="#intro"
+          href="/#intro"
           className="absolute left-4 top-4 z-[320] -translate-y-full rounded-full border border-gold/40 bg-noir px-4 py-2 text-sm text-ivory transition-transform focus:translate-y-0"
         >
           Skip to content
