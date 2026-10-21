@@ -88,6 +88,8 @@ export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) 
         onClick={(e) => e.stopPropagation()}
         className="flex max-h-full flex-col items-center gap-4"
       >
+        {/* Fullskärmsbild med okänd bildproportion — next/image kräver fasta mått. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={image.src}
           alt={image.alt}

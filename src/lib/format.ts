@@ -1,10 +1,17 @@
-export function formatPrice(price: string): string {
-  if (price.startsWith("From ")) {
-    return `From ${price.slice(5)} kr`;
-  }
-  return `${price} kr`;
-}
+import type { ZoneId } from "@/server/config";
 
-export function formatPriceShort(price: string): string {
-  return `${price.replace("From ", "")} kr`;
+export const zoneLabels: Record<ZoneId | string, string> = {
+  service: "Service & underhåll",
+  diagnos: "Diagnos & felsökning",
+  lack: "Lack & reparation",
+  verkstad: "Större reparation",
+};
+
+export function formatDateShort(iso: string): string {
+  try {
+    const d = new Date(`${iso}T00:00:00Z`);
+    return d.toLocaleDateString("sv-SE", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return iso;
+  }
 }

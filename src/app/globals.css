@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-noir: #0a0908;
-  --color-charcoal: #141109;
-  --color-charcoal-2: #1c1711;
-  --color-ivory: #f4efe3;
-  --color-cream: #eae1cd;
-  --color-gold: #c2a369;
-  --color-gold-soft: #a98c54;
-  --color-ash: #cfc7b7;
-  --color-ash-dim: #8f8879;
+  --color-noir: #070606;
+  --color-charcoal: #12110e;
+  --color-charcoal-2: #191611;
+  --color-ivory: #f6f3ee;
+  --color-cream: #ebe4d6;
+  --color-gold: #b9a06c;
+  --color-gold-soft: #a08d55;
+  --color-bronze: #8c7342;
+  --color-ash: #d6d0c4;
+  --color-ash-dim: #9a9486;
 
-  --font-display: var(--font-cormorant), "Times New Roman", serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -36,7 +37,7 @@ body {
 }
 
 ::selection {
-  background: rgba(194, 163, 105, 0.28);
+  background: rgba(185, 160, 108, 0.28);
   color: var(--color-ivory);
 }
 
@@ -68,11 +69,11 @@ body {
 }
 
 .u-eyebrow {
-  @apply flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.3em] text-gold;
+  @apply flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.32em] text-gold;
 }
 
 .u-section-label {
-  @apply text-[11px] font-medium uppercase tracking-[0.3em] text-gold;
+  @apply text-[11px] font-medium uppercase tracking-[0.32em] text-gold;
 }
 
 /* ----- Hairlines ----- */
@@ -81,8 +82,8 @@ body {
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(194, 163, 105, 0.5),
-    rgba(194, 163, 105, 0.05)
+    rgba(185, 160, 108, 0.7),
+    rgba(185, 160, 108, 0.08)
   );
 }
 
@@ -101,13 +102,13 @@ body {
 /* ----- Buttons ----- */
 
 .btn {
-  @apply relative inline-flex items-center justify-center gap-3 rounded-full px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] transition-[background-color,color,border-color,transform] duration-500;
+  @apply relative inline-flex items-center justify-center gap-3 rounded-full px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.26em] transition-[background-color,color,border-color,transform] duration-500;
   transition-timing-function: var(--ease-out-expo);
 }
 
 .btn-gold {
-  border: 1px solid rgba(194, 163, 105, 0.7);
-  color: #f4efe3;
+  border: 1px solid rgba(185, 160, 108, 0.8);
+  color: #f6f3ee;
   overflow: hidden;
 }
 
@@ -115,13 +116,13 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--color-gold);
+  background: linear-gradient(90deg, rgba(185, 160, 108, 0.22), rgba(140, 115, 66, 0.16));
   opacity: 0;
   transition: opacity 500ms var(--ease-out-expo);
 }
 
 .btn-gold:hover::before {
-  opacity: 0.16;
+  opacity: 1;
 }
 
 .btn-gold:hover {
@@ -130,12 +131,12 @@ body {
 }
 
 .btn-ghost {
-  border: 1px solid rgba(244, 239, 227, 0.22);
-  color: #f4efe3;
+  border: 1px solid rgba(246, 243, 238, 0.24);
+  color: #f6f3ee;
 }
 
 .btn-ghost:hover {
-  border-color: rgba(244, 239, 227, 0.7);
+  border-color: rgba(246, 243, 238, 0.8);
   color: #ffffff;
   transform: translateY(-1px);
 }
@@ -216,7 +217,7 @@ body {
 .cursor-ring {
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(244, 239, 227, 0.4);
+  border: 1px solid rgba(246, 243, 238, 0.38);
   transition:
     width 400ms var(--ease-out-expo),
     height 400ms var(--ease-out-expo),
@@ -235,22 +236,22 @@ body {
 .cursor-ring.is-hover {
   width: 62px;
   height: 62px;
-  background: rgba(194, 163, 105, 0.08);
-  border-color: rgba(194, 163, 105, 0.85);
+  background: rgba(185, 160, 108, 0.1);
+  border-color: rgba(185, 160, 108, 0.9);
 }
 
 .cursor-ring.is-view {
   width: 82px;
   height: 82px;
-  background: rgba(10, 9, 8, 0.55);
-  border-color: rgba(194, 163, 105, 0.9);
+  background: rgba(7, 6, 6, 0.55);
+  border-color: rgba(185, 160, 108, 0.92);
   backdrop-filter: blur(2px);
 }
 
 .cursor-ring .cursor-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--color-gold);
   opacity: 0;

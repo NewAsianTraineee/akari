@@ -30,7 +30,7 @@ export function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-[150] transition-[background-color,backdrop-filter,border-color] duration-700 ${
           scrolled || open
-            ? "border-b border-gold/10 bg-noir/85 backdrop-blur-md"
+            ? "border-b border-gold/10 bg-noir/90 backdrop-blur-md"
             : "border-b border-transparent bg-transparent"
         }`}
       >
@@ -42,30 +42,30 @@ export function Navbar() {
           <a
             href={anchor("#top")}
             onClick={close}
-            aria-label={`${restaurant.name} — home`}
-            className="relative z-[160] flex items-baseline gap-2 font-display text-[1.6rem] font-medium tracking-[0.16em] text-ivory"
+            aria-label={`${restaurant.name} Bilverkstad — hem`}
+            className="relative z-[160] flex items-baseline gap-2 font-display text-[1.6rem] font-medium tracking-[0.18em] text-ivory"
           >
             {restaurant.name}
-            <span className="text-sm tracking-[0.2em] text-gold" aria-hidden="true">
-              {restaurant.nameJapanese}
+            <span className="text-xs tracking-[0.22em] text-gold" aria-hidden="true">
+              BILVERKSTAD
             </span>
           </a>
 
-          <nav className="hidden items-center gap-9 lg:flex" aria-label="Main">
+          <nav className="hidden items-center gap-9 lg:flex" aria-label="Huvudmeny">
             {restaurant.nav.map((item) => (
               <a
                 key={item.href}
                 href={anchor(item.href)}
                 onClick={close}
-                className="u-anim-line text-[11px] font-medium uppercase tracking-[0.24em] text-ivory/75 transition-colors duration-300 hover:text-ivory"
+                className="u-anim-line text-[10px] font-medium uppercase tracking-[0.28em] text-ivory/80 transition-colors duration-300 hover:text-ivory"
               >
                 {item.label}
               </a>
             ))}
             <a
-              href="/demo"
+              href="/admin"
               onClick={close}
-              className="u-anim-line text-[11px] font-medium uppercase tracking-[0.24em] text-gold transition-colors duration-300 hover:text-gold-soft"
+              className="u-anim-line text-[10px] font-medium uppercase tracking-[0.28em] text-gold transition-colors duration-300 hover:text-gold-soft"
             >
               Admin
             </a>
@@ -73,16 +73,16 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <a
-              href={anchor("#reserve")}
+              href={anchor("#boka")}
               onClick={close}
-              className="btn btn-gold !px-6 !py-2.5 hidden text-[11px] sm:inline-flex"
+              className="btn btn-gold !px-6 !py-2.5 hidden text-[10px] sm:inline-flex"
             >
-              Reserve
+              Boka service
             </a>
             <button
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
-              aria-label={open ? "Close menu" : "Open menu"}
+              aria-label={open ? "Stäng meny" : "Öppna meny"}
               className="relative z-[160] flex h-11 w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
             >
               <span
@@ -107,7 +107,7 @@ export function Navbar() {
         }`}
         aria-hidden={!open}
       >
-        <nav className="flex flex-col gap-7" aria-label="Mobile">
+        <nav className="flex flex-col gap-7" aria-label="Mobilmeny">
           {restaurant.nav.map((item, i) => (
             <a
               key={item.href}
@@ -125,18 +125,18 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="/demo"
+            href="/admin"
             onClick={close}
             className="btn btn-ghost mt-2 w-fit !text-[10px]"
           >
             Admin
           </a>
           <a
-            href={anchor("#reserve")}
+            href={anchor("#boka")}
             onClick={close}
             className="btn btn-gold mt-4 w-fit"
           >
-            Reserve a table
+            Boka service
           </a>
         </nav>
       </div>

@@ -1,32 +1,30 @@
 export const restaurant = {
-  name: "AKARI",
-  nameJapanese: "灯",
-  tagline: "Omakase · Contemporary Japanese",
+  name: "AUREUM",
+  tagline: "Lyxig bilverkstad & servicecenter",
   description:
-    "AKARI is a contemporary omakase counter in Stockholm — an intimate evening built around seasonality, precision and quiet hospitality.",
-  url: "https://akari-seven.vercel.app",
-  // ---- Contact details (placeholders — replace with real info) ----
-  address: "Address Placeholder, Stockholm",
-  city: "Stockholm, Sweden",
-  phone: "+46 70 000 00 00",
-  email: "reservations@akari.demo",
-  mapQuery: "Stockholm, Sweden",
+    "Aureum Bilverkstad är en exklusiv, fullservande bilverkstad i Stockholm. Vi specialiserar oss på högkvalitativ service, reparationer, diagnos, lack & plåt samt underhåll för premium- och sportbilar med fokus på precision, transparens och tidlös lyx.",
+  url: "https://aureum-bilverkstad.se",
+  address: "Kungsgatan 45, Stockholm",
+  city: "Stockholm, Sverige",
+  phone: "+46 70 555 00 00",
+  email: "bokning@aureum-bilverkstad.se",
+  mapQuery: "Kungsgatan 45 Stockholm",
   instagram: "https://www.instagram.com/",
   openingHours: {
-    monday: { label: "Monday", closed: true },
-    tuesday: { label: "Tuesday", hours: "17:00 — 23:00" },
-    wednesday: { label: "Wednesday", hours: "17:00 — 23:00" },
-    thursday: { label: "Thursday", hours: "17:00 — 23:00" },
-    friday: { label: "Friday", hours: "17:00 — 00:00" },
-    saturday: { label: "Saturday", hours: "17:00 — 00:00" },
-    sunday: { label: "Sunday", closed: true },
+    monday: { label: "Måndag", hours: "07:00 — 17:00" },
+    tuesday: { label: "Tisdag", hours: "07:00 — 17:00" },
+    wednesday: { label: "Onsdag", hours: "07:00 — 17:00" },
+    thursday: { label: "Torsdag", hours: "07:00 — 17:00" },
+    friday: { label: "Fredag", hours: "07:00 — 16:00" },
+    saturday: { label: "Lördag", closed: true },
+    sunday: { label: "Söndag", closed: true },
   },
   nav: [
-    { label: "Menu", href: "#menu" },
-    { label: "Experience", href: "#experience" },
-    { label: "Atelier", href: "#atelier" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "Contact", href: "#contact" },
+    { label: "Tjänster", href: "#tjanster" },
+    { label: "Process", href: "#process" },
+    { label: "Verkstaden", href: "#verkstad" },
+    { label: "Galleri", href: "#galleri" },
+    { label: "Kontakt", href: "#kontakt" },
   ] as const,
 };
 
@@ -39,63 +37,90 @@ type OpeningDay = {
 export const hoursList: OpeningDay[] = Object.values(restaurant.openingHours);
 
 export const hero = {
-  eyebrow: "Omakase · Contemporary Japanese",
-  headlineA: "The art of",
-  headlineB: "the counter.",
+  eyebrow: "Exklusiv bilverkstad i Stockholm",
+  headlineA: "Precision.",
+  headlineB: "Prestanda. Förtroende.",
   sub:
-    "A twelve-seat omakase counter serving an evening shaped by the season — nigiri, sake and quiet precision.",
-  ctaPrimary: "Reserve a table",
-  ctaPrimaryHref: "#reserve",
-  ctaSecondary: "Explore the menu",
-  ctaSecondaryHref: "#menu",
+    "En lyxig, manlig och trovärdig verkstad för premiumbilar. Vi erbjuder bokningsbara servicepass, transparenta offerter och en verkstad med tidlös elegans.",
+  ctaPrimary: "Boka service",
+  ctaPrimaryHref: "#boka",
+  ctaSecondary: "Våra tjänster",
+  ctaSecondaryHref: "#tjanster",
 };
 
 export const intro = {
-  label: "The philosophy",
-  headingTop: "Precision, seasonality,",
-  headingEm: "the art of sushi.",
+  label: "Vår filosofi",
+  headingTop: "Ingen kompromiss när det gäller",
+  headingEm: "detaljerna.",
   body: [
-    "AKARI began with a simple conviction: that a single piece of nigiri can carry as much intention as a long tasting menu. We work with a small number of suppliers who share our patience — waiting for the fish to be at its best, rather than the calendar.",
-    "Every evening is composed by the chef from the day's arrival. There is no fixed menu in the traditional sense — only the discipline of rice, fish, temperature and time.",
+    "Aureum föddes ur tron att en bil förtjänar samma omsorg som den var konstruerad med. Vi kombinerar modern diagnostik med gammaldags hantverk och sträng kvalitetssäkring i varje moment.",
+    "Vårt mål är att ge dig en trygg, transparent och lyxig upplevelse — från bokning till leverans av din bil.",
   ],
 };
 
-export const omakase = {
-  label: "The omakase experience",
-  heading: "An evening shaped by the chef.",
+export const services = {
+  label: "Tjänster",
+  heading: "Service skräddarsytt efter din bil.",
   body:
-    "Omakase means trust — you place your evening in the chef's hands. Course by course, nigiri set down at the counter, timed to the pace of your conversation. Roughly twelve to fourteen pieces, guided by what arrived that morning.",
-  price: "12–14 courses · seasonal",
-  cta: "Discover the experience",
-  ctaHref: "#reserve",
+    "Från regelbundet underhåll och felsökning till kompletta reparationer, lack och plåt. Vi planerar arbetet efter dina behov och håller dig uppdaterad genom hela processen.",
+  price: "Transparent offert — inga dolda kostnader",
+  cta: "Boka din tid",
+  ctaHref: "#boka",
   points: [
-    { title: "Twelve seats", body: "A single evening service, an intimate counter seating twelve." },
-    { title: "Seasonal arrival", body: "The menu follows the morning market arrival — nothing is fixed." },
-    { title: "Served at pace", body: "Nigiri timed to the room — warm rice, correct temperature, no rush." },
+    { title: "Premiumdiagnos", body: "Avancerad diagnosutrustning för exakt felbeskrivning." },
+    { title: "Originalkvalitet", body: "Noggrant utvalda reservdelar av högsta kvalitet." },
+    { title: "Tidsbokning", body: "Boka service online och se tillgängliga tider i realtid." },
   ],
 };
 
-export const chef = {
-  label: "The atelier",
-  headingTop: "Discipline, by hand,",
-  headingEm: "night after night.",
+export const process = {
+  label: "Så arbetar vi",
+  heading: "Fyra steg. Full transparens.",
   body:
-    "The rice is seasoned with a house-blended vinegar and rested precisely. The fish is broken down each afternoon. The shoyu is aged in-house. The repetition is not routine — it is the practice that makes precision possible.",
+    "Varje bokning följer samma tydliga flöde. Du vet alltid vad som händer, varför det händer och vad det kostar — innan vi sätter igång.",
+  cta: "Boka ett servicepass",
+  ctaHref: "#boka",
+  steps: [
+    {
+      title: "Diagnos",
+      body: "Vi läser av bilen, provkör och dokumenterar skicket innan något arbete påbörjas.",
+    },
+    {
+      title: "Offert",
+      body: "Du får en tydlig offert med pris, reservdelar och tidslinje. Först när du godkänner drar vi igång.",
+    },
+    {
+      title: "Arbete",
+      body: "Erfarna mekaniker arbetar enligt rutin, med namngivna kontrollpunkter genomgående.",
+    },
+    {
+      title: "Slutkontroll",
+      body: "Provkörning, kvalitetsrapport och fordonshistorik — bilen lämnas först när allt är godkänt.",
+    },
+  ],
+};
+
+export const workshop = {
+  label: "Verkstaden",
+  headingTop: "Hantverk, precision och",
+  headingEm: "disciplin.",
+  body:
+    "Vår verkstad är byggd för lugn, ordning och renlighet. Varje arbete följer tydliga rutiner, kvalitetskontroller och dokumenteras noggrant — för ditt lugn och bilens bästa.",
   quote:
-    "Good sushi is not loud. It is the quiet confidence of doing one thing properly.",
+    "Sann kvalitet syns inte bara i resultatet, utan i hur vi arbetar varje dag.",
 };
 
-export const privateDining = {
-  label: "Private dining",
-  heading: "Close the door. It's yours.",
+export const vip = {
+  label: "Serviceavtal & VIP",
+  heading: "VIP-service anpassad för dig.",
   body:
-    "For celebrations, quiet company dinners or a room for an occasion worth marking — the counter can be reserved privately, or a smaller room made available for up to six guests.",
-  cta: "Inquire about private dining",
-  ctaHref: "mailto:reservations@akari.demo?subject=Private%20dining",
+    "Behöver du löpande service för din bilflotta eller exklusiv upphämtning och leverans? Vi skräddarsyr avtal och VIP-paket efter dina önskemål.",
+  cta: "Begär offert",
+  ctaHref: "mailto:bokning@aureum-bilverkstad.se?subject=Begär%20offert",
   points: [
-    "Semi-private counter for up to six",
-    "Dedicated chef for the evening",
-    "Pairing designed for the room",
-    "Catered menus for special occasions",
+    "Serviceavtal för företag & privat",
+    "Upphämtning & leverans inom Stockholm",
+    "Lånebil av premiumklass vid behov",
+    "Prioriterad bokning för återkommande kunder",
   ],
 };

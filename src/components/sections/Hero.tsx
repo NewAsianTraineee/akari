@@ -12,15 +12,15 @@ export function Hero() {
       <div className="absolute inset-0">
         <Image
           src="/images/hero/hero.jpg"
-          alt="Ōtoro nigiri on dark stone, dramatic light"
+          alt="Lyxig sportbil i elegant verkstadsmiljö"
           fill
           priority
           sizes="100vw"
           quality={90}
-          style={{ objectFit: "cover", animation: "hero-slow-zoom 9s var(--ease-out-expo) forwards" }}
+          style={{ objectFit: "cover", animation: "hero-slow-zoom 10s var(--ease-out-expo) forwards" }}
         />
-        <div className="absolute inset-0 bg-noir/58" />
-        <div className="absolute inset-0 bg-gradient-to-b from-noir/70 via-transparent to-noir" />
+        <div className="absolute inset-0 bg-noir/62" />
+        <div className="absolute inset-0 bg-gradient-to-b from-noir/78 via-noir/40 to-noir" />
       </div>
 
       <div className="u-container relative z-10 flex min-h-[100svh] flex-col justify-center pb-24 pt-32">
@@ -29,12 +29,12 @@ export function Hero() {
           style={{ animation: "hero-reveal 1s var(--ease-out-expo) 200ms backwards" }}
         >
           <span className="hairline w-12" />
-          <p className="text-[11px] font-medium uppercase tracking-[0.34em] text-gold">
+          <p className="text-[10px] font-medium uppercase tracking-[0.38em] text-gold">
             {hero.eyebrow}
           </p>
         </div>
 
-        <h1 className="mt-8 font-display text-[clamp(3.4rem,10vw,8.5rem)] font-light leading-[0.95] tracking-tight text-ivory">
+        <h1 className="mt-8 font-display text-[clamp(3.2rem,10vw,8.8rem)] font-light leading-[0.93] tracking-tight text-ivory">
           <span
             className="block"
             style={{ animation: "hero-reveal 1.1s var(--ease-out-expo) 380ms backwards" }}
@@ -42,7 +42,7 @@ export function Hero() {
             {hero.headlineA}
           </span>
           <span
-            className="block italic"
+            className="block"
             style={{ animation: "hero-reveal 1.1s var(--ease-out-expo) 500ms backwards" }}
           >
             {hero.headlineB}
@@ -50,7 +50,7 @@ export function Hero() {
         </h1>
 
         <p
-          className="mt-8 max-w-md text-[15px] leading-relaxed text-ivory/75"
+          className="mt-8 max-w-lg text-[15px] leading-relaxed text-ivory/78"
           style={{ animation: "hero-reveal 1.1s var(--ease-out-expo) 700ms backwards" }}
         >
           {hero.sub}
@@ -74,10 +74,10 @@ export function Hero() {
         className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 md:flex"
         style={{ animation: "hero-reveal 1.2s var(--ease-out-expo) 1200ms backwards" }}
       >
-        <span className="text-[10px] uppercase tracking-[0.4em] text-ivory/50">
+        <span className="text-[9px] uppercase tracking-[0.44em] text-ivory/45">
           Scroll
         </span>
-        <span className="relative h-14 w-px overflow-hidden bg-ivory/15">
+        <span className="relative h-14 w-px overflow-hidden bg-ivory/12">
           <span
             className="absolute left-0 top-0 h-1/2 w-px bg-gold"
             style={{ animation: "scroll-line 2.2s var(--ease-out-expo) infinite" }}

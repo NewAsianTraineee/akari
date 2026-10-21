@@ -1,109 +1,126 @@
-# AKARI — Omakase · Contemporary Japanese
+# AUREUM — Lyxig bilverkstad
 
-A dark, premium single-page restaurant site. Matte black and ivory, champagne-gold accents, Cormorant Garamond display type, a slow camera-drawn pace.
+En mörk, premium startsida för en bilverkstad i Stockholm — samma lugna, lyxiga
+känsla som Akari-mallen (noir, ivory, guld, Cinzel-displaytypsnitt, långsamma
+reveal-animationer) kombinerat med ett riktigt bokningssystem i backend.
 
-Built with **Next.js 16 + React 19 + TypeScript + Tailwind CSS 4**.
+Byggd med **Next.js 16 + React 19 + TypeScript + Tailwind CSS 4** och ett
+REST-baserat boknings-API med SQLite, cookie-session och adminpanel.
 
 ---
 
-## Getting started
+## Kom igång
 
 ```bash
 npm install
-npm run dev          # http://localhost:3001
+npm run dev          # http://localhost:3000
 ```
 
-Production build & lint:
+Produktionsbyggnad & lint:
 
 ```bash
 npm run build
 npm run lint
 ```
 
+Miljövariabler är valfria — admin-lösenordet är `admin` om `ADMIN_PASSWORD`
+inte är satt (se `src/server/db.ts`).
+
 ---
 
-## Project structure
+## Projektstruktur
 
 ```
 public/images/
-  hero/          hero photo
-  menu/          signature dish photos
-  chef/          chef portrait
-  restaurant/    interior scenes (counter, room, detail)
-  gallery/       gallery grid photos
+  hero/          hero-bilder
+  gallery/       galleribilder
+  interior/      verkstadsmiljö
+  chef/          hantverksbild
+  cuts/          sportbil under service
 src/
   app/
-    layout.tsx   fonts, metadata, JSON-LD, navbar/footer/cursor
-    page.tsx     section order
-    globals.css  design tokens, buttons, cursor, keyframes
+    layout.tsx     typsnitt, metadata, JSON-LD, navbar/footer/cursor
+    page.tsx       sektionsordning
+    globals.css    design tokens, knappar, cursor, keyframes
+    admin/         ägarkonsol (inloggning + bokningslista)
+    api/
+      availability/  GET  /api/availability
+      bookings/      POST/GET /api/bookings, GET/PATCH/DELETE /api/bookings/:id
+      admin/         login / logout / me
   data/
-    restaurant.ts  brand info, hours, nav, section copy
-    menu.ts        full menu categories
-    dishes.ts      signature dishes
-    gallery.ts     gallery + interior images
+    restaurant.ts   varumärke, öppettider, all sektionscopy
+    gallery.ts      galleri- och interiörbilder
   components/
-    ui/            Reveal, Arrow/MagneticButton, Cursor, Lightbox
-    layout/        Navbar, Footer
-    sections/      Hero → Intro → SignatureDishes → Omakase → MenuSection
-                   → Chef → Interior → Gallery → PrivateDining → Reservation → Location
-  lib/motion.ts    useInView, useParallax
+    ui/             Reveal, Arrow/MagneticButton, Cursor, Lightbox
+    layout/         Navbar, Footer
+    booking/        BookingForm (kopplad till API:et)
+    sections/       Hero → Intro → Services → Process → Workshop
+                    → Interior → Gallery → Vip → Reservation → Location
+  server/           backend-lagret (config, db, auth, validation, bookings)
+  lib/              nav, motion, format
 ```
 
 ---
 
-## Customising the site
+## Innehåll
 
-All content lives in `src/data/`. To edit the menu, brand copy, hours or
-contact wishlist, change `src/data/*.ts` — no component edits needed.
+All text och bokningsbara tjänster ligger i `src/data/` och `src/server/config.ts`:
 
-To replace photography:
+- **Copy, öppettider, nav** — `src/data/restaurant.ts`
+- **Galleribilder** — `src/data/gallery.ts`
+- **Zoner, tider, kapacitet, statusar** — `src/server/config.ts`
+  (Service & underhåll, Diagnos, Lack & reparation, Större reparation)
 
-1. Put new images in `public/images/...` (jpg/webp).
-2. Update the `src` paths in `src/data/dishes.ts`, `src/data/gallery.ts`,
-   and the section components (`Hero`, `Omakase`, `Chef`).
-
-Industry-standard metadata (Open Graph, Twitter card, schema.org
-`Restaurant` JSON-LD) is emitted in `src/app/layout.tsx`.
-
----
-
-## Design system
-
-- **Palette** — noir `#0a0908`, charcoal `#141109`, ivory `#f4efe3`,
-  gold `#c2a369`, gold-soft `#a98c54`, ash `#cfc7b7`
-- **Type** — Cormorant Garamond (display) / Inter (body), via `next/font`
-- **Motion** — `--ease-out-expo`; `hero-slow-zoom`, `hero-reveal`,
-  `scroll-line`, shimmer; respects `prefers-reduced-motion`
-- **Interactions** — custom gold cursor, scroll-reveal, magnetic buttons,
-  masonry gallery with lightbox, tabbed menu, demo reservation form
+Byt fotografier genom att lägga nya bilder i `public/images/...` och uppdatera
+`src`-sökvägarna i `src/data/gallery.ts` samt i sektionskomponenterna
+(`Hero`, `Services`, `Process`, `Workshop`, `Interior`, `Vip`).
 
 ---
 
-## Real content still to add
+## Backend-API (Aureum-stil)
 
-The following are clearly-marked placeholders and must be replaced before
-going live:
+Samma backend som i `General/Backend_Booking` — portabelt, inga npm-beroenden
+(`node:sqlite` + `node:crypto` bygger in i Node 22.13+/24).
 
-- Address, city, phone, email, Instagram, opening hours —
-  `src/data/restaurant.ts`
-- Menu prices (`From 220`, `1,450`, etc.) —
-  `src/data/menu.ts` / `src/data/dishes.ts`
-- Map embed in `src/components/sections/Location.tsx` (currently an
-  illustrated placeholder)
-- Photo credits/attribution (demo photos are Unsplash, free-license;
-  verify before launch)
-- `restaurant.url` in `src/data/restaurant.ts` (currently a demo URL)
-- Production SEO fields (openingHours array in `src/app/layout.tsx`)
+| Route | Metod | Beskrivning |
+| --- | --- | --- |
+| `/api/availability?date=ÅÅÅÅ-MM-DD` | GET | Lediga tider per zon |
+| `/api/bookings` | POST | Skapa bokning (publik, validering + kapacitet) |
+| `/api/bookings` | GET | Lista/filter (admin) |
+| `/api/bookings/:id` | GET/PATCH/DELETE | En bokning (admin) |
+| `/api/admin/login` · `/logout` · `/me` | POST/POST/GET | Cookie-session |
+
+Responskoder: `201` skapad, `409` zon/tid full, `422` validering
+(`fields` med felmeddelande per fält), `401` obehörig.
+
+Admin: `/admin` — inloggning `admin` / `admin` (ändra via `ADMIN_PASSWORD`).
+Databasen skapas automatiskt i `data/aureum.db` vid första anropet.
 
 ---
 
-## Deploying
+## Designsystem
 
-Not deployed yet — this is a local dev build.
+- **Palett** — noir `#070606`, charcoal `#12110e`, ivory `#f6f3ee`,
+  guld `#b9a06c`, guld-soft `#a08d55`, ask `#d6d0c4`
+- **Typsnitt** — Cinzel (display) / Jost (body) via `next/font`
+- **Rörelse** — `--ease-out-expo`, `hero-slow-zoom`, `hero-reveal`,
+  `scroll-line`, respekterar `prefers-reduced-motion`
+- **Interaktioner** — egen guld-cursor, scroll-reveal, magnetiska knappar,
+  galleri med lightbox, formulär med realtidsuppdaterad tillgänglighet
 
-When ready:
+---
 
-1. Create a GitHub repo for this folder.
-2. Import the repo on Vercel (auto-deploys on push to `main`).
-3. Add the real domain + production `restaurant.url`.
-4. Optional: link `Reserve` and the reservation form to a booking service.
+## Att göra före lansering
+
+- Adress, telefon, e-post, Instagram, priser — `src/data/restaurant.ts`
+- Riktig karta (även om kart-embed finns) och skärmdump/Open Graph-bild
+- Sätt `ADMIN_PASSWORD` (och gärna `SESSION_COOKIE_NAME`) i `.env.local`
+- Kontrollera att foton har rätt licens
+
+---
+
+## Deploya
+
+1. Skapa ett GitHub-repo för mappen.
+2. Importera i Vercel (auto-deployp vid push till `main`).
+3. Lägg till domän och sätt produktions-`restaurant.url`.

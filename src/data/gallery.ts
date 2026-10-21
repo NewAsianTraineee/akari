@@ -5,42 +5,41 @@ export type GalleryImage = {
   wide?: boolean;
 };
 
-// Demo gallery — replace images in public/images/gallery/ and update paths here.
 export const galleryImages: GalleryImage[] = [
   {
-    src: "/images/gallery/nigiri-01.jpg",
-    alt: "Nigiri set down at the counter",
+    src: "/images/gallery/gallery-01.jpg",
+    alt: "Lyxig verkstad - detalj",
     wide: true,
   },
   {
-    src: "/images/gallery/interior-01.jpg",
-    alt: "The omakase counter in warm evening light",
+    src: "/images/gallery/gallery-02.jpg",
+    alt: "Premium bil i verkstaden",
     tall: true,
   },
   {
-    src: "/images/gallery/sashimi-01.jpg",
-    alt: "Sashimi arranged on chilled stone",
+    src: "/images/gallery/gallery-03.jpg",
+    alt: "Hantverk i fokus",
   },
   {
-    src: "/images/restaurant/detail.jpg",
-    alt: "Material detail — warm light at the counter",
+    src: "/images/interior/interior-01.jpg",
+    alt: "Ren verkstadsmiljö",
   },
   {
-    src: "/images/gallery/interior-02.jpg",
-    alt: "Table setting in gold-light",
+    src: "/images/interior/interior-02.jpg",
+    alt: "Diagnos och verktyg",
   },
   {
-    src: "/images/gallery/chef-01.jpg",
-    alt: "The chef at work, evening service",
+    src: "/images/chef/chef-01.jpg",
+    alt: "Noggrant arbete",
     tall: true,
   },
   {
-    src: "/images/menu/omakase.jpg",
-    alt: "Omakase courses at the counter",
+    src: "/images/cuts/cuts-01.jpg",
+    alt: "Sportbil under service",
   },
   {
-    src: "/images/menu/amaebi.jpg",
-    alt: "Nigiri touched with wasabi and shiso",
+    src: "/images/hero/hero-02.jpg",
+    alt: "Aureum verkstad",
   },
 ];
 
@@ -51,15 +50,17 @@ export type RestaurantScene = {
 
 export const interiorScenes: RestaurantScene[] = [
   {
-    src: "/images/restaurant/counter.jpg",
-    alt: "The sushi counter",
+    src: "/images/interior/interior-01.jpg",
+    alt: "Verkstadslokalen",
   },
   {
-    src: "/images/restaurant/room.jpg",
-    alt: "The dining room",
+    src: "/images/interior/interior-02.jpg",
+    alt: "Servicehörna",
   },
   {
-    src: "/images/restaurant/detail.jpg",
-    alt: "Material detail — warm wood and stone",
+    src: "/images/gallery/gallery-01.jpg",
+    alt: "Detaljer",
   },
 ];
+
+export const gallery = galleryImages;
